@@ -38,14 +38,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var MSGraphHelper = /** @class */ (function () {
     function MSGraphHelper() {
     }
-    MSGraphHelper.Init = function (context) {
+    MSGraphHelper.Init = function (msGraphClientFactory) {
         return __awaiter(this, void 0, void 0, function () {
             var _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         _a = this;
-                        return [4 /*yield*/, context.msGraphClientFactory.getClient()];
+                        return [4 /*yield*/, msGraphClientFactory.getClient()];
                     case 1:
                         _a._graphClient = _b.sent();
                         return [2 /*return*/];

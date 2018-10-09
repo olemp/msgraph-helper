@@ -1,11 +1,10 @@
-import { WebPartContext } from '@microsoft/sp-webpart-base';
 import { GraphError } from '@microsoft/microsoft-graph-client';
-import { MSGraphClient } from '@microsoft/sp-http';
+import { MSGraphClient, MSGraphClientFactory } from '@microsoft/sp-http';
 
 export default class MSGraphHelper {
     private static _graphClient: MSGraphClient;
-    public static async Init(context: WebPartContext) {
-        this._graphClient = await context.msGraphClientFactory.getClient();
+    public static async Init(msGraphClientFactory: MSGraphClientFactory) {
+        this._graphClient = await msGraphClientFactory.getClient();
     }
 
     public static async Get(apiUrl: string, version: string = "v1.0", selectProperties?: string[], filter?: string): Promise<any> {

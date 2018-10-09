@@ -11,7 +11,7 @@ import MSGraph from 'msgraph-helper';
 In your main webpart or extension in the `onInit` function, add the following:
 
 ```typescript
- await MSGraph.Init(this.context);
+ await MSGraph.Init(this.context.msGraphClientFactory);
  ```
 
  Anywhere in your soluton you can now do:
