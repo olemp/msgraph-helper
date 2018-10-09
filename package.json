@@ -1,7 +1,7 @@
 {
-  "name": "spfx-jsom",
-  "version": "0.6.0",
-  "description": "Simplifies JSOM for SPFx",
+  "name": "msgraph-helper",
+  "version": "0.0.1",
+  "description": "Simplifies MSGraph usage for SPFx",
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
@@ -10,20 +10,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/olemp/spfx-jsom.git"
+    "url": "git+https://github.com/olemp/msgraph-helper.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/olemp/spfx-jsom/issues"
+    "url": "https://github.com/olemp/msgraph-helper/issues"
   },
-  "homepage": "https://github.com/olemp/spfx-jsom#readme",
-  "dependencies": {
-    "@microsoft/sp-loader": "^1.4.0",
-    "jsom-ctx": "^1.0.8"
-  },
+  "homepage": "https://github.com/olemp/msgraph-helper#readme",
   "devDependencies": {
     "@types/microsoft-ajax": "0.0.33",
     "@types/sharepoint": "^2016.1.0"
+  },
+  "dependencies": {
+    "@microsoft/microsoft-graph-client": "^1.3.0",
+    "@microsoft/sp-http": "^1.6.0",
+    "@microsoft/sp-webpart-base": "^1.6.0"
   }
 }

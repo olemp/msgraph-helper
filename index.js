@@ -35,46 +35,161 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var sp_loader_1 = require("@microsoft/sp-loader");
-var jsom_ctx_1 = require("jsom-ctx");
-exports.ExecuteJsomQuery = jsom_ctx_1.ExecuteJsomQuery;
-exports.JsomContext = jsom_ctx_1.JsomContext;
-function initSpxJsom(url, options) {
-    if (options === void 0) { options = {}; }
-    return __awaiter(this, void 0, void 0, function () {
-        var jsomContext;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, sp_loader_1.SPComponentLoader.loadScript('/_layouts/15/init.js', { globalExportsName: '$_global_init' })];
-                case 1:
-                    _a.sent();
-                    return [4 /*yield*/, sp_loader_1.SPComponentLoader.loadScript('/_layouts/15/MicrosoftAjax.js', { globalExportsName: 'Sys' })];
-                case 2:
-                    _a.sent();
-                    return [4 /*yield*/, sp_loader_1.SPComponentLoader.loadScript('/_layouts/15/SP.Runtime.js', { globalExportsName: 'SP' })];
-                case 3:
-                    _a.sent();
-                    return [4 /*yield*/, sp_loader_1.SPComponentLoader.loadScript('/_layouts/15/SP.js', { globalExportsName: 'SP' })];
-                case 4:
-                    _a.sent();
-                    if (!options.loadTaxonomy) return [3 /*break*/, 6];
-                    return [4 /*yield*/, sp_loader_1.SPComponentLoader.loadScript('/_layouts/15/SP.Taxonomy.js', { globalExportsName: 'SP.Taxonomy' })];
-                case 5:
-                    _a.sent();
-                    _a.label = 6;
-                case 6:
-                    if (!options.loadPublishing) return [3 /*break*/, 8];
-                    return [4 /*yield*/, sp_loader_1.SPComponentLoader.loadScript('/_layouts/15/SP.Publishing.js', { globalExportsName: 'SP.Publishing' })];
-                case 7:
-                    _a.sent();
-                    _a.label = 8;
-                case 8: return [4 /*yield*/, jsom_ctx_1.CreateJsomContext(url)];
-                case 9:
-                    jsomContext = _a.sent();
-                    return [2 /*return*/, jsomContext];
-            }
+var MSGraphHelper = /** @class */ (function () {
+    function MSGraphHelper() {
+    }
+    MSGraphHelper.Init = function (context) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = this;
+                        return [4 /*yield*/, context.msGraphClientFactory.getClient()];
+                    case 1:
+                        _a._graphClient = _b.sent();
+                        return [2 /*return*/];
+                }
+            });
         });
-    });
-}
-exports.default = initSpxJsom;
+    };
+    MSGraphHelper.Get = function (apiUrl, version, selectProperties, filter) {
+        if (version === void 0) { version = "v1.0"; }
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            var p;
+            return __generator(this, function (_a) {
+                p = new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                    var query, callback;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                query = this._graphClient.api(apiUrl).version(version);
+                                if (selectProperties && selectProperties.length > 0) {
+                                    query = query.select(selectProperties);
+                                }
+                                if (filter && filter.length > 0) {
+                                    query = query.filter(filter);
+                                }
+                                callback = function (error, response, rawResponse) {
+                                    if (error) {
+                                        reject(error);
+                                    }
+                                    else {
+                                        resolve(response);
+                                    }
+                                };
+                                return [4 /*yield*/, query.get(callback)];
+                            case 1:
+                                _a.sent();
+                                return [2 /*return*/];
+                        }
+                    });
+                }); });
+                return [2 /*return*/, p];
+            });
+        });
+    };
+    MSGraphHelper.Patch = function (apiUrl, version, content) {
+        if (version === void 0) { version = "v1.0"; }
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            var p;
+            return __generator(this, function (_a) {
+                p = new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                    var query, callback;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                if (typeof (content) === "object") {
+                                    content = JSON.stringify(content);
+                                }
+                                query = this._graphClient.api(apiUrl).version(version);
+                                callback = function (error, _response, rawResponse) {
+                                    if (error) {
+                                        reject(error);
+                                    }
+                                    else {
+                                        resolve();
+                                    }
+                                };
+                                return [4 /*yield*/, query.update(content, callback)];
+                            case 1:
+                                _a.sent();
+                                return [2 /*return*/];
+                        }
+                    });
+                }); });
+                return [2 /*return*/, p];
+            });
+        });
+    };
+    MSGraphHelper.Post = function (apiUrl, version, content) {
+        if (version === void 0) { version = "v1.0"; }
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            var p;
+            return __generator(this, function (_a) {
+                p = new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                    var query, callback;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                if (typeof (content) === "object") {
+                                    content = JSON.stringify(content);
+                                }
+                                query = this._graphClient.api(apiUrl).version(version);
+                                callback = function (error, response, rawResponse) {
+                                    if (error) {
+                                        reject(error);
+                                    }
+                                    else {
+                                        resolve(response);
+                                    }
+                                };
+                                return [4 /*yield*/, query.post(content, callback)];
+                            case 1:
+                                _a.sent();
+                                return [2 /*return*/];
+                        }
+                    });
+                }); });
+                return [2 /*return*/, p];
+            });
+        });
+    };
+    MSGraphHelper.Delete = function (apiUrl, version) {
+        if (version === void 0) { version = "v1.0"; }
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            var p;
+            return __generator(this, function (_a) {
+                p = new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+                    var query, callback;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                query = this._graphClient.api(apiUrl).version(version);
+                                callback = function (error, response, rawResponse) {
+                                    if (error) {
+                                        reject(error);
+                                    }
+                                    else {
+                                        resolve(response);
+                                    }
+                                };
+                                return [4 /*yield*/, query.delete(callback)];
+                            case 1:
+                                _a.sent();
+                                return [2 /*return*/];
+                        }
+                    });
+                }); });
+                return [2 /*return*/, p];
+            });
+        });
+    };
+    return MSGraphHelper;
+}());
+exports.default = MSGraphHelper;
 //# sourceMappingURL=index.js.map

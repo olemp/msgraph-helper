@@ -1,24 +1,85 @@
-import { SPComponentLoader } from '@microsoft/sp-loader';
-import { CreateJsomContext, ExecuteJsomQuery, JsomContext } from "jsom-ctx";
+import { WebPartContext } from '@microsoft/sp-webpart-base';
+import { GraphError } from '@microsoft/microsoft-graph-client';
+import { MSGraphClient } from '@microsoft/sp-http';
 
-export interface ISpfxJsomOptions {
-    loadPublishing?: boolean;
-    loadTaxonomy?: boolean;
-}
-
-export default async function initSpxJsom(url: string, options: ISpfxJsomOptions = {}): Promise<JsomContext> {
-    await SPComponentLoader.loadScript('/_layouts/15/init.js', { globalExportsName: '$_global_init' });
-    await SPComponentLoader.loadScript('/_layouts/15/MicrosoftAjax.js', { globalExportsName: 'Sys' });
-    await SPComponentLoader.loadScript('/_layouts/15/SP.Runtime.js', { globalExportsName: 'SP' });
-    await SPComponentLoader.loadScript('/_layouts/15/SP.js', { globalExportsName: 'SP' });
-    if (options.loadTaxonomy) {
-        await SPComponentLoader.loadScript('/_layouts/15/SP.Taxonomy.js', { globalExportsName: 'SP.Taxonomy' });
+export default class MSGraphHelper {
+    private static _graphClient: MSGraphClient;
+    public static async Init(context: WebPartContext) {
+        this._graphClient = await context.msGraphClientFactory.getClient();
     }
-    if (options.loadPublishing) {
-        await SPComponentLoader.loadScript('/_layouts/15/SP.Publishing.js', { globalExportsName: 'SP.Publishing' });
-    }
-    const jsomContext = await CreateJsomContext(url);
-    return jsomContext;
-}
 
-export { ExecuteJsomQuery, JsomContext };
+    public static async Get(apiUrl: string, version: string = "v1.0", selectProperties?: string[], filter?: string): Promise<any> {
+        var p = new Promise<string>(async (resolve, reject) => {
+            let query = this._graphClient.api(apiUrl).version(version);
+            if (selectProperties && selectProperties.length > 0) {
+                query = query.select(selectProperties);
+            }
+            if (filter && filter.length > 0) {
+                query = query.filter(filter);
+            }
+
+            let callback = (error: GraphError, response: any, rawResponse?: any) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(response);
+                }
+            };
+            await query.get(callback);
+        });
+        return p;
+    }
+
+    public static async Patch(apiUrl: string, version: string = "v1.0", content: any): Promise<any> {
+        var p = new Promise<string>(async (resolve, reject) => {
+            if (typeof (content) === "object") {
+                content = JSON.stringify(content);
+            }
+
+            let query = this._graphClient.api(apiUrl).version(version);
+            let callback = (error: GraphError, _response: any, rawResponse?: any) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve();
+                }
+            };
+            await query.update(content, callback);
+        });
+        return p;
+    }
+
+    public static async Post(apiUrl: string, version: string = "v1.0", content: any): Promise<any> {
+        var p = new Promise<string>(async (resolve, reject) => {
+            if (typeof (content) === "object") {
+                content = JSON.stringify(content);
+            }
+
+            let query = this._graphClient.api(apiUrl).version(version);
+            let callback = (error: GraphError, response: any, rawResponse?: any) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(response);
+                }
+            };
+            await query.post(content, callback);
+        });
+        return p;
+    }
+
+    public static async Delete(apiUrl: string, version: string = "v1.0"): Promise<any> {
+        var p = new Promise<string>(async (resolve, reject) => {
+            let query = this._graphClient.api(apiUrl).version(version);
+            let callback = (error: GraphError, response: any, rawResponse?: any) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(response);
+                }
+            };
+            await query.delete(callback);
+        });
+        return p;
+    }
+}
