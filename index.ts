@@ -7,7 +7,16 @@ export default class MSGraphHelper {
         this._graphClient = await msGraphClientFactory.getClient();
     }
 
-    public static async Get(apiUrl: string, version: string = "v1.0", selectProperties?: string[], filter?: string): Promise<any> {
+    /**
+     * Get
+     * 
+     * @param {string} apiUrl API url
+     * @param {string} version Version (default to v1.0)
+     * @param {Array<string>} selectProperties Select properties
+     * @param {string} filter Filter
+     * @param {number} top Number of items to retrieve
+     */
+    public static async Get(apiUrl: string, version: string = "v1.0", selectProperties?: Array<string>, filter?: string, top?: number): Promise<any> {
         var p = new Promise<string>(async (resolve, reject) => {
             let query = this._graphClient.api(apiUrl).version(version);
             if (selectProperties && selectProperties.length > 0) {
@@ -15,6 +24,9 @@ export default class MSGraphHelper {
             }
             if (filter && filter.length > 0) {
                 query = query.filter(filter);
+            }
+            if (top) {
+                query = query.top(top);
             }
 
             let callback = (error: GraphError, response: any, rawResponse?: any) => {
@@ -29,6 +41,13 @@ export default class MSGraphHelper {
         return p;
     }
 
+    /**
+     * Patch
+     * 
+     * @param {string} apiUrl API url
+     * @param {string} version Version (default to v1.0)
+     * @param {any} content Content
+     */
     public static async Patch(apiUrl: string, version: string = "v1.0", content: any): Promise<any> {
         var p = new Promise<string>(async (resolve, reject) => {
             if (typeof (content) === "object") {
@@ -48,6 +67,13 @@ export default class MSGraphHelper {
         return p;
     }
 
+    /**
+     * Post
+     * 
+     * @param {string} apiUrl API url
+     * @param {string} version Version (default to v1.0)
+     * @param {any} content Content
+     */
     public static async Post(apiUrl: string, version: string = "v1.0", content: any): Promise<any> {
         var p = new Promise<string>(async (resolve, reject) => {
             if (typeof (content) === "object") {
@@ -67,6 +93,12 @@ export default class MSGraphHelper {
         return p;
     }
 
+    /**
+     * Delete
+     * 
+     * @param {string} apiUrl API url
+     * @param {string} version Version (default to v1.0)
+     */
     public static async Delete(apiUrl: string, version: string = "v1.0"): Promise<any> {
         var p = new Promise<string>(async (resolve, reject) => {
             let query = this._graphClient.api(apiUrl).version(version);

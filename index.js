@@ -53,7 +53,16 @@ var MSGraphHelper = /** @class */ (function () {
             });
         });
     };
-    MSGraphHelper.Get = function (apiUrl, version, selectProperties, filter) {
+    /**
+     * Get
+     *
+     * @param {string} apiUrl API url
+     * @param {string} version Version (default to v1.0)
+     * @param {Array<string>} selectProperties Select properties
+     * @param {string} filter Filter
+     * @param {number} top Number of items to retrieve
+     */
+    MSGraphHelper.Get = function (apiUrl, version, selectProperties, filter, top) {
         if (version === void 0) { version = "v1.0"; }
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
@@ -70,6 +79,9 @@ var MSGraphHelper = /** @class */ (function () {
                                 }
                                 if (filter && filter.length > 0) {
                                     query = query.filter(filter);
+                                }
+                                if (top) {
+                                    query = query.top(top);
                                 }
                                 callback = function (error, response, rawResponse) {
                                     if (error) {
@@ -90,6 +102,13 @@ var MSGraphHelper = /** @class */ (function () {
             });
         });
     };
+    /**
+     * Patch
+     *
+     * @param {string} apiUrl API url
+     * @param {string} version Version (default to v1.0)
+     * @param {any} content Content
+     */
     MSGraphHelper.Patch = function (apiUrl, version, content) {
         if (version === void 0) { version = "v1.0"; }
         return __awaiter(this, void 0, void 0, function () {
@@ -124,6 +143,13 @@ var MSGraphHelper = /** @class */ (function () {
             });
         });
     };
+    /**
+     * Post
+     *
+     * @param {string} apiUrl API url
+     * @param {string} version Version (default to v1.0)
+     * @param {any} content Content
+     */
     MSGraphHelper.Post = function (apiUrl, version, content) {
         if (version === void 0) { version = "v1.0"; }
         return __awaiter(this, void 0, void 0, function () {
@@ -158,6 +184,12 @@ var MSGraphHelper = /** @class */ (function () {
             });
         });
     };
+    /**
+     * Delete
+     *
+     * @param {string} apiUrl API url
+     * @param {string} version Version (default to v1.0)
+     */
     MSGraphHelper.Delete = function (apiUrl, version) {
         if (version === void 0) { version = "v1.0"; }
         return __awaiter(this, void 0, void 0, function () {
