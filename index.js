@@ -14,8 +14,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -53,6 +53,29 @@ var MSGraphHelper = /** @class */ (function () {
             });
         });
     };
+    // let values: any[] = [];
+    // while (true) {
+    //     let response: GraphHttpClientResponse = await graphClient.get(url, GraphHttpClient.configurations.v1);
+    //     // Check that the request was successful
+    //     if (response.ok) {
+    //         let result = await response.json();
+    //         let nextLink = result["@odata.nextLink"];
+    //         // Check if result is single entity or an array of results
+    //         if (result.value && result.value.length > 0) {
+    //             values.push.apply(values, result.value);
+    //         }
+    //         result.value = values;
+    //         if (nextLink) {
+    //             url = result["@odata.nextLink"].replace("https://graph.microsoft.com/", "");
+    //         } else {
+    //             return result;
+    //         }
+    //     }
+    //     else {
+    //         // Reject with the error message
+    //         throw new Error(response.statusText);
+    //     }
+    // }
     /**
      * Get
      *
@@ -61,44 +84,52 @@ var MSGraphHelper = /** @class */ (function () {
      * @param {Array<string>} selectProperties Select properties
      * @param {string} filter Filter
      * @param {number} top Number of items to retrieve
+     * @param {string} expand Expand
      */
-    MSGraphHelper.Get = function (apiUrl, version, selectProperties, filter, top) {
+    MSGraphHelper.Get = function (apiUrl, version, selectProperties, filter, top, expand) {
         if (version === void 0) { version = "v1.0"; }
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
-            var p;
+            var values, query, callback;
             return __generator(this, function (_a) {
-                p = new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-                    var query, callback;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                query = this._graphClient.api(apiUrl).version(version);
-                                if (selectProperties && selectProperties.length > 0) {
-                                    query = query.select(selectProperties);
-                                }
-                                if (filter && filter.length > 0) {
-                                    query = query.filter(filter);
-                                }
-                                if (top) {
-                                    query = query.top(top);
-                                }
-                                callback = function (error, response, rawResponse) {
-                                    if (error) {
-                                        reject(error);
-                                    }
-                                    else {
-                                        resolve(response);
-                                    }
-                                };
-                                return [4 /*yield*/, query.get(callback)];
-                            case 1:
-                                _a.sent();
-                                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0:
+                        values = [];
+                        query = this._graphClient.api(apiUrl).version(version);
+                        if (selectProperties && selectProperties.length > 0) {
+                            query = query.select(selectProperties);
                         }
-                    });
-                }); });
-                return [2 /*return*/, p];
+                        if (filter && filter.length > 0) {
+                            query = query.filter(filter);
+                        }
+                        if (top) {
+                            query = query.top(top);
+                        }
+                        if (expand) {
+                            query = query.expand(expand);
+                        }
+                        _a.label = 1;
+                    case 1:
+                        if (!true) return [3 /*break*/, 3];
+                        callback = function (error, response) {
+                            if (error) {
+                                throw new Error(error.message);
+                            }
+                            else {
+                                var nextLink = response["@odata.nextLink"];
+                                if (response.value && response.value.length > 0) {
+                                    values.push(response.value);
+                                }
+                                if (!nextLink) {
+                                    return values;
+                                }
+                            }
+                        };
+                        return [4 /*yield*/, query.get(callback)];
+                    case 2:
+                        _a.sent();
+                        return [3 /*break*/, 1];
+                    case 3: return [2 /*return*/];
+                }
             });
         });
     };
@@ -112,8 +143,8 @@ var MSGraphHelper = /** @class */ (function () {
     MSGraphHelper.Patch = function (apiUrl, version, content) {
         if (version === void 0) { version = "v1.0"; }
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
             var p;
+            var _this = this;
             return __generator(this, function (_a) {
                 p = new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                     var query, callback;
@@ -153,8 +184,8 @@ var MSGraphHelper = /** @class */ (function () {
     MSGraphHelper.Post = function (apiUrl, version, content) {
         if (version === void 0) { version = "v1.0"; }
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
             var p;
+            var _this = this;
             return __generator(this, function (_a) {
                 p = new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                     var query, callback;
@@ -193,8 +224,8 @@ var MSGraphHelper = /** @class */ (function () {
     MSGraphHelper.Delete = function (apiUrl, version) {
         if (version === void 0) { version = "v1.0"; }
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
             var p;
+            var _this = this;
             return __generator(this, function (_a) {
                 p = new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
                     var query, callback;
