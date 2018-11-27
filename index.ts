@@ -37,7 +37,7 @@ export default class MSGraphHelper {
             while (true) {
                 await query.get((error: GraphError, response: any) => {
                     if (error) {
-                        reject(new Error(error.message));
+                        reject(error);
                     } else {
                         let nextLink = response["@odata.nextLink"];
                         if (response.value && response.value.length > 0) {

@@ -90,7 +90,7 @@ var MSGraphHelper = /** @class */ (function () {
                         if (!true) return [3 /*break*/, 3];
                         return [4 /*yield*/, query.get(function (error, response) {
                                 if (error) {
-                                    reject(new Error(error.message));
+                                    reject(error);
                                 }
                                 else {
                                     var nextLink = response["@odata.nextLink"];
