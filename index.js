@@ -89,7 +89,7 @@ var MSGraphHelper = /** @class */ (function () {
     MSGraphHelper.Get = function (apiUrl, version, selectProperties, filter, top, expand) {
         if (version === void 0) { version = "v1.0"; }
         return __awaiter(this, void 0, void 0, function () {
-            var values, query, callback;
+            var values, query;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -110,21 +110,20 @@ var MSGraphHelper = /** @class */ (function () {
                         _a.label = 1;
                     case 1:
                         if (!true) return [3 /*break*/, 3];
-                        callback = function (error, response) {
-                            if (error) {
-                                throw new Error(error.message);
-                            }
-                            else {
-                                var nextLink = response["@odata.nextLink"];
-                                if (response.value && response.value.length > 0) {
-                                    values.push(response.value);
+                        return [4 /*yield*/, query.get(function (error, response) {
+                                if (error) {
+                                    throw new Error(error.message);
                                 }
-                                if (!nextLink) {
-                                    return values;
+                                else {
+                                    var nextLink = response["@odata.nextLink"];
+                                    if (response.value && response.value.length > 0) {
+                                        values.push(response.value);
+                                    }
+                                    if (!nextLink) {
+                                        return values;
+                                    }
                                 }
-                            }
-                        };
-                        return [4 /*yield*/, query.get(callback)];
+                            })];
                     case 2:
                         _a.sent();
                         return [3 /*break*/, 1];

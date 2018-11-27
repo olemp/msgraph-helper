@@ -1,7 +1,6 @@
-import { MSGraphClientFactory } from '@microsoft/sp-http';
 export default class MSGraphHelper {
     private static _graphClient;
-    static Init(msGraphClientFactory: MSGraphClientFactory): Promise<void>;
+    static Init(msGraphClientFactory: any): Promise<void>;
     /**
      * Get
      *

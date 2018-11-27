@@ -1,9 +1,9 @@
 import { GraphError } from '@microsoft/microsoft-graph-client';
-import { MSGraphClient, MSGraphClientFactory } from '@microsoft/sp-http';
+import { MSGraphClient } from '@microsoft/sp-http';
 
 export default class MSGraphHelper {
     private static _graphClient: MSGraphClient;
-    public static async Init(msGraphClientFactory: MSGraphClientFactory) {
+    public static async Init(msGraphClientFactory) {
         this._graphClient = await msGraphClientFactory.getClient();
     }
 
@@ -58,7 +58,7 @@ export default class MSGraphHelper {
         }
 
         while (true) {
-            let callback = (error: GraphError, response: any) => {
+            await query.get((error: GraphError, response: any) => {
                 if (error) {
                     throw new Error(error.message);
                 } else {
@@ -70,8 +70,7 @@ export default class MSGraphHelper {
                         return values;
                     }
                 }
-            };
-            await query.get(callback);
+            });
         }
     }
 
