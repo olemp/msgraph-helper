@@ -53,29 +53,6 @@ var MSGraphHelper = /** @class */ (function () {
             });
         });
     };
-    // let values: any[] = [];
-    // while (true) {
-    //     let response: GraphHttpClientResponse = await graphClient.get(url, GraphHttpClient.configurations.v1);
-    //     // Check that the request was successful
-    //     if (response.ok) {
-    //         let result = await response.json();
-    //         let nextLink = result["@odata.nextLink"];
-    //         // Check if result is single entity or an array of results
-    //         if (result.value && result.value.length > 0) {
-    //             values.push.apply(values, result.value);
-    //         }
-    //         result.value = values;
-    //         if (nextLink) {
-    //             url = result["@odata.nextLink"].replace("https://graph.microsoft.com/", "");
-    //         } else {
-    //             return result;
-    //         }
-    //     }
-    //     else {
-    //         // Reject with the error message
-    //         throw new Error(response.statusText);
-    //     }
-    // }
     /**
      * Get
      *
@@ -87,8 +64,9 @@ var MSGraphHelper = /** @class */ (function () {
      * @param {string} expand Expand
      */
     MSGraphHelper.Get = function (apiUrl, version, selectProperties, filter, top, expand) {
+        var _this = this;
         if (version === void 0) { version = "v1.0"; }
-        return __awaiter(this, void 0, void 0, function () {
+        return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
             var values, query;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -112,7 +90,7 @@ var MSGraphHelper = /** @class */ (function () {
                         if (!true) return [3 /*break*/, 3];
                         return [4 /*yield*/, query.get(function (error, response) {
                                 if (error) {
-                                    throw new Error(error.message);
+                                    reject(new Error(error.message));
                                 }
                                 else {
                                     var nextLink = response["@odata.nextLink"];
@@ -120,7 +98,7 @@ var MSGraphHelper = /** @class */ (function () {
                                         values.push(response.value);
                                     }
                                     if (!nextLink) {
-                                        return values;
+                                        resolve(values);
                                     }
                                 }
                             })];
@@ -130,7 +108,7 @@ var MSGraphHelper = /** @class */ (function () {
                     case 3: return [2 /*return*/];
                 }
             });
-        });
+        }); });
     };
     /**
      * Patch
