@@ -9,9 +9,9 @@ export default class MSGraphHelper {
      * @param {Array<string>} selectProperties Select properties
      * @param {string} filter Filter
      * @param {number} top Number of items to retrieve
-     * @param {string} expand Expand
+     * @param {Array<string>} expand Expand
      */
-    static Get(apiUrl: string, version?: string, selectProperties?: Array<string>, filter?: string, top?: number, expand?: string): Promise<any>;
+    static Get(apiUrl: string, version?: string, selectProperties?: Array<string>, filter?: string, top?: number, expand?: Array<string>): Promise<any>;
     /**
      * Patch
      *

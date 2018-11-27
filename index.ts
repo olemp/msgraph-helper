@@ -15,9 +15,9 @@ export default class MSGraphHelper {
      * @param {Array<string>} selectProperties Select properties
      * @param {string} filter Filter
      * @param {number} top Number of items to retrieve
-     * @param {string} expand Expand
+     * @param {Array<string>} expand Expand
      */
-    public static Get(apiUrl: string, version: string = "v1.0", selectProperties?: Array<string>, filter?: string, top?: number, expand?: string): Promise<any> {
+    public static Get(apiUrl: string, version: string = "v1.0", selectProperties?: Array<string>, filter?: string, top?: number, expand?: Array<string>): Promise<any> {
         return new Promise<any>(async (resolve, reject) => {
             let values = [];
             let query = this._graphClient.api(apiUrl).version(version);

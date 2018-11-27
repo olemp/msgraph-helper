@@ -61,7 +61,7 @@ var MSGraphHelper = /** @class */ (function () {
      * @param {Array<string>} selectProperties Select properties
      * @param {string} filter Filter
      * @param {number} top Number of items to retrieve
-     * @param {string} expand Expand
+     * @param {Array<string>} expand Expand
      */
     MSGraphHelper.Get = function (apiUrl, version, selectProperties, filter, top, expand) {
         var _this = this;
