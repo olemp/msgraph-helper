@@ -96,7 +96,7 @@ var MSGraphHelper = /** @class */ (function () {
                         response = _a.sent();
                         nextLink = response["@odata.nextLink"];
                         if (response.value && response.value.length > 0) {
-                            values.push(response.value);
+                            values.push.apply(values, response.value);
                         }
                         if (!nextLink) {
                             return [2 /*return*/, values];

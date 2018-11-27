@@ -39,7 +39,7 @@ export default class MSGraphHelper {
                     let response = await query.get();
                     let nextLink = response["@odata.nextLink"];
                     if (response.value && response.value.length > 0) {
-                        values.push(response.value);
+                        values.push(...response.value);
                     }
                     if (!nextLink) {
                         return values;
