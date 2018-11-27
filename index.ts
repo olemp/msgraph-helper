@@ -17,8 +17,8 @@ export default class MSGraphHelper {
      * @param {number} top Number of items to retrieve
      * @param {Array<string>} expand Expand
      */
-    public static Get(apiUrl: string, version: string = "v1.0", selectProperties?: Array<string>, filter?: string, top?: number, expand?: Array<string>): Promise<any> {
-        return new Promise<any>(async (resolve, reject) => {
+    public static async Get(apiUrl: string, version: string = "v1.0", selectProperties?: Array<string>, filter?: string, top?: number, expand?: Array<string>): Promise<any> {
+        try {
             let values = [];
             let query = this._graphClient.api(apiUrl).version(version);
             if (selectProperties && selectProperties.length > 0) {
@@ -34,23 +34,23 @@ export default class MSGraphHelper {
                 query = query.expand(expand);
             }
 
-            // while (true) {
-            let response = await query.get();
-            console.log(response);
-            //     if (error) {
-            //         reject(error);
-            //     } else {
-            //         let nextLink = response["@odata.nextLink"];
-            //         if (response.value && response.value.length > 0) {
-            //             values.push(response.value);
-            //         }
-            //         if (!nextLink) {
-            //             resolve(values);
-            //         }
-            //     }
-            // });
-            // }
-        });
+            while (true) {
+                try {
+                    let response = await query.get();
+                    let nextLink = response["@odata.nextLink"];
+                    if (response.value && response.value.length > 0) {
+                        values.push(response.value);
+                    }
+                    if (!nextLink) {
+                        return values;
+                    }
+                } catch (error) {
+                    throw error;
+                }
+            }
+        } catch (error) {
+            throw error;
+        }
     }
 
     /**
