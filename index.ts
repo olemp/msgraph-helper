@@ -34,21 +34,22 @@ export default class MSGraphHelper {
                 query = query.expand(expand);
             }
 
-            while (true) {
-                await query.get((error: GraphError, response: any) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        let nextLink = response["@odata.nextLink"];
-                        if (response.value && response.value.length > 0) {
-                            values.push(response.value);
-                        }
-                        if (!nextLink) {
-                            resolve(values);
-                        }
-                    }
-                });
-            }
+            // while (true) {
+            let response = await query.get();
+            console.log(response);
+            //     if (error) {
+            //         reject(error);
+            //     } else {
+            //         let nextLink = response["@odata.nextLink"];
+            //         if (response.value && response.value.length > 0) {
+            //             values.push(response.value);
+            //         }
+            //         if (!nextLink) {
+            //             resolve(values);
+            //         }
+            //     }
+            // });
+            // }
         });
     }
 

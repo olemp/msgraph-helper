@@ -67,7 +67,7 @@ var MSGraphHelper = /** @class */ (function () {
         var _this = this;
         if (version === void 0) { version = "v1.0"; }
         return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
-            var values, query;
+            var values, query, response;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -85,27 +85,11 @@ var MSGraphHelper = /** @class */ (function () {
                         if (expand) {
                             query = query.expand(expand);
                         }
-                        _a.label = 1;
+                        return [4 /*yield*/, query.get()];
                     case 1:
-                        if (!true) return [3 /*break*/, 3];
-                        return [4 /*yield*/, query.get(function (error, response) {
-                                if (error) {
-                                    reject(error);
-                                }
-                                else {
-                                    var nextLink = response["@odata.nextLink"];
-                                    if (response.value && response.value.length > 0) {
-                                        values.push(response.value);
-                                    }
-                                    if (!nextLink) {
-                                        resolve(values);
-                                    }
-                                }
-                            })];
-                    case 2:
-                        _a.sent();
-                        return [3 /*break*/, 1];
-                    case 3: return [2 /*return*/];
+                        response = _a.sent();
+                        console.log(response);
+                        return [2 /*return*/];
                 }
             });
         }); });
