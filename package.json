@@ -1,6 +1,6 @@
 {
   "name": "msgraph-helper",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Simplifies MSGraph usage for SPFx",
   "main": "index.js",
   "types": "index.d.ts",
