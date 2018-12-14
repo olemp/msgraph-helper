@@ -34,20 +34,27 @@ export default class MSGraphHelper {
                 query = query.expand(expand);
             }
 
-            while (true) {
-                try {
-                    let response = await query.get();
-                    let nextLink = response["@odata.nextLink"];
-                    if (response.value && response.value.length > 0) {
-                        values.push(...response.value);
+            let response = await query.get();
+            if (response.value && response.value.length > 0) {
+                values.push(...response.value);
+            }
+            let nextLink = response["@odata.nextLink"];
+            if (response.nextLink) {
+                while (true) {
+                    try {
+                        nextLink = response["@odata.nextLink"];
+                        if (response.value && response.value.length > 0) {
+                            values.push(...response.value);
+                        }
+                        if (!nextLink) {
+                            break;
+                        }
+                    } catch (error) {
+                        throw error;
                     }
-                    if (!nextLink) {
-                        return values;
-                    }
-                } catch (error) {
-                    throw error;
                 }
             }
+            return values;
         } catch (error) {
             throw error;
         }

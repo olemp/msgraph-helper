@@ -66,11 +66,11 @@ var MSGraphHelper = /** @class */ (function () {
     MSGraphHelper.Get = function (apiUrl, version, selectProperties, filter, top, expand) {
         if (version === void 0) { version = "v1.0"; }
         return __awaiter(this, void 0, void 0, function () {
-            var values, query, response, nextLink, error_1, error_2;
+            var values, query, response, nextLink, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 7, , 8]);
+                        _a.trys.push([0, 2, , 3]);
                         values = [];
                         query = this._graphClient.api(apiUrl).version(version);
                         if (selectProperties && selectProperties.length > 0) {
@@ -85,32 +85,34 @@ var MSGraphHelper = /** @class */ (function () {
                         if (expand) {
                             query = query.expand(expand);
                         }
-                        _a.label = 1;
-                    case 1:
-                        if (!true) return [3 /*break*/, 6];
-                        _a.label = 2;
-                    case 2:
-                        _a.trys.push([2, 4, , 5]);
                         return [4 /*yield*/, query.get()];
-                    case 3:
+                    case 1:
                         response = _a.sent();
-                        nextLink = response["@odata.nextLink"];
                         if (response.value && response.value.length > 0) {
                             values.push.apply(values, response.value);
                         }
-                        if (!nextLink) {
-                            return [2 /*return*/, values];
+                        nextLink = response["@odata.nextLink"];
+                        if (response.nextLink) {
+                            while (true) {
+                                try {
+                                    nextLink = response["@odata.nextLink"];
+                                    if (response.value && response.value.length > 0) {
+                                        values.push.apply(values, response.value);
+                                    }
+                                    if (!nextLink) {
+                                        break;
+                                    }
+                                }
+                                catch (error) {
+                                    throw error;
+                                }
+                            }
                         }
-                        return [3 /*break*/, 5];
-                    case 4:
+                        return [2 /*return*/, values];
+                    case 2:
                         error_1 = _a.sent();
                         throw error_1;
-                    case 5: return [3 /*break*/, 1];
-                    case 6: return [3 /*break*/, 8];
-                    case 7:
-                        error_2 = _a.sent();
-                        throw error_2;
-                    case 8: return [2 /*return*/];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
