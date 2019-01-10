@@ -1,10 +1,13 @@
 import { GraphError } from '@microsoft/microsoft-graph-client';
 import { MSGraphClient } from '@microsoft/sp-http';
+import { Logger, LogLevel, ConsoleListener } from '@pnp/logging';
 
 export default class MSGraphHelper {
     private static _graphClient: MSGraphClient;
     public static async Init(msGraphClientFactory) {
         this._graphClient = await msGraphClientFactory.getClient();
+        Logger.subscribe(new ConsoleListener());
+        Logger.activeLogLevel = LogLevel.Info;
     }
 
     /**
@@ -33,15 +36,18 @@ export default class MSGraphHelper {
             if (expand) {
                 query = query.expand(expand);
             }
+            Logger.log({ message: `(MSGraphHelper) Get`, data: { urlComponents: query.urlComponents }, level: LogLevel.Info });
 
             let response = await query.get();
             if (response.value && response.value.length > 0) {
                 values.push(...response.value);
             }
             let nextLink = response["@odata.nextLink"];
-            if (response.nextLink) {
+            if (nextLink) {
                 while (true) {
                     try {
+                        query.parsePath(nextLink);
+                        response = await query.get();
                         nextLink = response["@odata.nextLink"];
                         if (response.value && response.value.length > 0) {
                             values.push(...response.value);

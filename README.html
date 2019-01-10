@@ -1,0 +1,15 @@
+<h1>msgraph-helper</h1>
+<p>Simplifies usage of the MSGraph client in your SPFX solutions.</p>
+<h2>Usage</h2>
+<p>Import the helper:</p>
+<pre><code class="language-typescript">import MSGraph from 'msgraph-helper';
+</code></pre>
+<p>In your main webpart or extension in the <code>onInit</code> function, add the following:</p>
+<pre><code class="language-typescript"> await MSGraph.Init(this.context.msGraphClientFactory);
+</code></pre>
+<p>Anywhere in your soluton you can now do:</p>
+<pre><code class="language-typescript">import MSGraph from 'msgraph-helper';
+
+let memberOf = await MSGraph.Get('/me/memberOf');
+</code></pre>
+<p>The helper supports <code>Get</code>, <code>Patch</code>, <code>Put</code> and <code>Delete</code>.</p>
